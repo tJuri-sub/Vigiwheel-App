@@ -1,88 +1,51 @@
-// function Signup() {
-//   const [name, setName] = useState();
-//   const [email, setEmail] = useState();
-//   const [password, setPassword] = useState();
-//   const [confirmpass, setConfirmpass] = useState();
-
-//   const handleSubmit = (e) => {
-//     e.preventDefault();
-//     axios
-//       .post("", { name, email, password })
-//       .then((result) => console.log(result))
-//       .catch((err) => console.log(err));
-//   };
-
-//   return (
-//     <div className="bg-gray-200 flex justify-center items-center h-screen">
-//       <div className="w-2/5 h-3/4 drop-shadow-md bg-white rounded-lg flex flex-col justify-center items-center p-5">
-//         <form onSubmit={handleSubmit} className="flex flex-col w-full gap-3">
-//           <input
-//             className="w-full border-2 p-2 border-black"
-//             type="text"
-//             placeholder="username"
-//             name="username"
-//             onChange={(e) => setName(e.target.value)}
-//           />
-//           <input
-//             className="w-full border-2 p-2 border-black"
-//             type="email"
-//             placeholder="email"
-//             name="email"
-//             onChange={(e) => setEmail(e.target.value)}
-//           />
-//           <input
-//             className="w-full border-2 p-2 border-black"
-//             type="password"
-//             placeholder="password"
-//             name="password"
-//             onChange={(e) => setPassword(e.target.value)}
-//           />
-//           <input
-//             className="w-full border-2 p-2 border-black"
-//             type="password"
-//             placeholder="confirm password"
-//             name="confirmpassword"
-//             onChange={(e) => setConfirmpass(e.target.value)}
-//           />
-//           <button className="hover:bg-slate-300 bg-slate-400 p-3" type="submit">
-//             Register
-//           </button>
-//         </form>
-//         <Link to="/login" className="mt-2 hover:bg-slate-300 bg-slate-400 p-3">
-//           Login
-//         </Link>
-//       </div>
-//     </div>
-//   );
-// }
-
-// export default Signup;
-
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
 import axios from "axios";
+import { Link } from "react-router-dom";
 import { EnvelopeIcon, PassIcon, UserIcon } from "./index/icons";
 
 function Signup() {
-  const [fname, setFname] = useState();
-  const [lname, setLname] = useState();
-  const [uname, setUname] = useState();
-  const [email, setEmail] = useState();
-  const [password, setPassword] = useState();
-  const [confirmpass, setConfirmpass] = useState();
+  const [info, setInfo] = useState({
+    firstName: "",
+    lastName: "",
+    username: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
+  });
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setInfo((prevInfo) => ({
+      ...prevInfo,
+      [name]: value,
+    }));
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    const { firstName, lastName, username, email, password, confirmPassword } =
+      info;
+
     axios
-      .post("", { fname, lname, uname, email, password, confirmpass })
-      .then((result) => console.log(result))
+      .post("/api/signup", {
+        firstname: firstName,
+        lastname: lastName,
+        username,
+        email,
+        password,
+        confirmPassword,
+      })
+      .then((result) => {
+        console.log(result);
+        // Handle successful sign-up (e.g., redirect to login or display a success message)
+      })
       .catch((err) => console.log(err));
   };
 
   return (
     <div className="bg-gradient-to-r from-[#121212] to-[#030149] h-screen flex justify-center items-center">
       <div className="w-[50%] mx-auto bg-white min-h-[400px] rounded-lg flex shadowbox">
-        {/* Left Side: Login Form */}
+        {/* Left Side: Sign Up Form */}
         <div className="w-[50%] px-3 py-6 flex flex-col justify-center">
           <h1 className="text-center text-2xl mb-4">Welcome!</h1>
           <form onSubmit={handleSubmit} className="w-[60%] mx-auto">
@@ -90,66 +53,72 @@ function Signup() {
               <div className="mb-4 relative flex items-center">
                 <input
                   id="firstname"
-                  name="firstname" // Add name attribute
+                  name="firstName"
                   className="border-[1px] border-slate-600 rounded-md p-[4px] w-full text-gray-700 pr-10"
                   type="text"
-                  placeholder="first name"
-                  onChange={(e) => setFname(e.target.value)}
+                  placeholder="First name"
+                  value={info.firstName}
+                  onChange={handleChange}
                 />
                 <UserIcon className="w-4 h-4 text-gray-400 absolute right-2" />
               </div>
               <div className="mb-4 relative flex items-center">
                 <input
                   id="lastname"
-                  name="lastname" // Add name attribute
+                  name="lastName"
                   className="border-[1px] border-slate-600 rounded-md p-[4px] w-full text-gray-700 pr-10"
                   type="text"
-                  placeholder="last name"
-                  onChange={(e) => setLname(e.target.value)}
+                  placeholder="Last name"
+                  value={info.lastName}
+                  onChange={handleChange}
                 />
                 <UserIcon className="w-4 h-4 text-gray-400 absolute right-2" />
               </div>
               <div className="mb-4 relative flex items-center">
                 <input
                   id="username"
-                  name="username" // Add name attribute
+                  name="username"
                   className="border-[1px] border-slate-600 rounded-md p-[4px] w-full text-gray-700 pr-10"
                   type="text"
-                  placeholder="username"
-                  onChange={(e) => setUname(e.target.value)}
+                  placeholder="Username"
+                  value={info.username}
+                  onChange={handleChange}
                 />
                 <UserIcon className="w-4 h-4 text-gray-400 absolute right-2" />
               </div>
               <div className="mb-4 relative flex items-center">
                 <input
                   id="email"
-                  name="email" // Add name attribute
+                  name="email"
                   className="border-[1px] border-slate-600 rounded-md p-[4px] w-full text-gray-700 pr-10"
                   type="text"
-                  placeholder="email"
-                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder="Email"
+                  value={info.email}
+                  onChange={handleChange}
                 />
                 <EnvelopeIcon className="w-4 h-4 text-gray-400 absolute right-2" />
               </div>
               <div className="mb-4 relative flex items-center">
                 <input
                   id="password"
-                  name="password" // Add name attribute
+                  name="password"
                   className="border-[1px] border-slate-600 rounded-md p-[4px] w-full text-gray-700 pr-10"
                   type="password"
                   placeholder="Password"
-                  onChange={(e) => setPassword(e.target.value)}
+                  value={info.password}
+                  onChange={handleChange}
                 />
                 <PassIcon className="w-4 h-4 text-gray-400 absolute right-2" />
               </div>
               <div className="mb-4 relative flex items-center">
                 <input
-                  id="confirmationpass"
-                  name="password" // Add name attribute
+                  id="confirmPassword"
+                  name="confirmPassword"
                   className="border-[1px] border-slate-600 rounded-md p-[4px] w-full text-gray-700 pr-10"
                   type="password"
-                  placeholder="confirm password"
-                  onChange={(e) => setConfirmpass(e.target.value)}
+                  placeholder="Confirm Password"
+                  value={info.confirmPassword}
+                  onChange={handleChange}
                 />
                 <PassIcon className="w-4 h-4 text-gray-400 absolute right-2" />
               </div>
@@ -159,12 +128,11 @@ function Signup() {
                 className="text-white bg-[#030149] w-[100%] text-center px-4 py-1 mb-[2px] flex items-center justify-center rounded-md cursor-pointer hover:bg-[#1b2374] transition hover:duration-100"
                 type="submit"
               >
-                Sign up
+                Sign Up
               </button>
               <Link
                 to="/login"
                 className="text-slate-400 text-[14px] hover:underline"
-                href="#"
               >
                 Already have an account?
               </Link>
