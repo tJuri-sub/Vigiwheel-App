@@ -5,8 +5,8 @@ import { EnvelopeIcon, PassIcon, UserIcon } from "./index/icons";
 
 function Signup() {
   const [info, setInfo] = useState({
-    firstName: "",
-    lastName: "",
+    firstname: "",
+    lastname: "",
     username: "",
     email: "",
     password: "",
@@ -23,13 +23,13 @@ function Signup() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const { firstName, lastName, username, email, password, confirmPassword } =
+    const { firstname, lastname, username, email, password, confirmPassword } =
       info;
 
     axios
-      .post("/api/signup", {
-        firstname: firstName,
-        lastname: lastName,
+      .post("http://localhost:5000/api/signup", {
+        firstname,
+        lastname,
         username,
         email,
         password,
