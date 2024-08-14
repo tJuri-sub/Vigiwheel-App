@@ -37,7 +37,6 @@ function Signup() {
       })
       .then((result) => {
         console.log(result);
-        // Handle successful sign-up (e.g., redirect to login or display a success message)
       })
       .catch((err) => console.log(err));
   };
