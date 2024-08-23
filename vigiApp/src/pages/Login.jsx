@@ -1,14 +1,41 @@
-import { PassIcon, UserIcon } from "./index/icons";
-import React from "react";
+import { PassIcon, UserIcon } from "../components/index/icons";
+import { React, useState } from "react";
+import { toast } from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 function Login() {
+  const navigate = useNavigate();
+  const [data, setData] = useState({
+    username: "",
+    password: "",
+  });
+
+  const loginUser = async (e) => {
+    e.preventDefault();
+    const { username, password } = data;
+    try {
+      const { data } = await axios.post("/login", {
+        username,
+        password,
+      });
+      if (data.error) {
+        toast.error(data.error);
+      } else {
+        setData({});
+        navigate("/landing");
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
   return (
     <div className="bg-gradient-to-r from-[#121212] to-[#030149] h-screen flex justify-center items-center">
       <div className="w-[50%] mx-auto bg-white min-h-[400px] rounded-lg flex shadowbox">
         {/* Left Side: Login Form */}
         <div className="w-[50%] p-3 flex flex-col justify-center">
           <h1 className="text-center text-2xl mb-4">Welcome!</h1>
-          <form className="w-[60%] mx-auto">
+          <form className="w-[60%] mx-auto" onSubmit={loginUser}>
             <div className="flex flex-col my-6">
               <div className="mb-4 relative flex items-center">
                 <input
@@ -17,6 +44,10 @@ function Login() {
                   className="border-[1px] border-slate-600 rounded-md p-[4px] w-full text-gray-700 pr-10"
                   type="text"
                   placeholder="Username"
+                  value={data.username}
+                  onChange={(e) =>
+                    setData({ ...data, username: e.target.value })
+                  }
                 />
                 <UserIcon className="w-4 h-4 text-gray-400 absolute right-2" />
               </div>
@@ -27,6 +58,10 @@ function Login() {
                   className="border-[1px] border-slate-600 rounded-md p-[4px] w-full text-gray-700 pr-10"
                   type="password"
                   placeholder="Password"
+                  value={data.password}
+                  onChange={(e) =>
+                    setData({ ...data, password: e.target.value })
+                  }
                 />
                 <PassIcon className="w-4 h-4 text-gray-400 absolute right-2" />
               </div>

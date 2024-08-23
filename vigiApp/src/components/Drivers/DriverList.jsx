@@ -11,7 +11,7 @@ export const DriverList = () => {
   ];
 
   return (
-    <div className="mt-8 p-4 bg-white shadow-3xl h-[39rem] overflow-hidden overflow-y-scroll ">
+    <div className="mt-8 p-4 bg-white shadow-3xl h-[35rem] overflow-hidden overflow-y-scroll ">
       <table className="w-full border-separate border-spacing-y-2">
         {driverData.map((driver, index) => (
           <tr key={index} className="bg-[#53ABD0] w-full my-1 ">

@@ -1,8 +1,7 @@
 const mongoose = require("mongoose");
-const bcrypt = require("bcrypt");
+const { Schema } = mongoose;
 
-// Define the user schema
-const userSchema = new mongoose.Schema({
+const userSchema = new Schema({
   firstname: {
     type: String,
     required: true,
@@ -14,12 +13,12 @@ const userSchema = new mongoose.Schema({
   username: {
     type: String,
     required: true,
-    unique: true, // Ensure usernames are unique
+    unique: true,
   },
   email: {
     type: String,
     required: true,
-    unique: true, // Ensure email addresses are unique
+    unique: true,
   },
   password: {
     type: String,
@@ -31,25 +30,6 @@ const userSchema = new mongoose.Schema({
   },
 });
 
-// Pre-save hook to hash the password before saving the user document
-userSchema.pre("save", async function (next) {
-  // Check if the password is being modified or if it's a new document
-  if (!this.isModified("password")) return next();
+const UserModel = mongoose.model("User", userSchema);
 
-  try {
-    const salt = await bcrypt.genSalt(10);
-    this.password = await bcrypt.hash(this.password, salt);
-    next();
-  } catch (err) {
-    next(err);
-  }
-});
-
-// Method to compare a provided password with the hashed password
-userSchema.methods.comparePassword = function (candidatePassword) {
-  return bcrypt.compare(candidatePassword, this.password);
-};
-
-// Export the User model
-const User = mongoose.model("User", userSchema);
-module.exports = User;
+module.exports = UserModel;
