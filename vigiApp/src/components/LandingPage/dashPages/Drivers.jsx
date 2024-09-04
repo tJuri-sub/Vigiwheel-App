@@ -1,5 +1,5 @@
 import React from "react";
-import { DriverList } from "./Drivers/DriverList";
+import { DriverList } from "../../Drivers/DriverList";
 
 function Drivers() {
   return (
