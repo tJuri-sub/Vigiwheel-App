@@ -1,34 +1,44 @@
 import { PassIcon, UserIcon } from "../components/index/icons";
-import { React, useState } from "react";
+import { React, useState, useEffect, useContext } from "react";
+import { UserContext } from "../../context/userContext";
 import { toast } from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
 function Login() {
   const navigate = useNavigate();
+
+  const { user, setUser } = useContext(UserContext);
+
   const [data, setData] = useState({
     username: "",
     password: "",
   });
 
+  useEffect(() => {
+    if (user) {
+      navigate("/landing"); // Change this to your landing page route
+    }
+  }, [user, navigate]);
+
   const loginUser = async (e) => {
     e.preventDefault();
     const { username, password } = data;
     try {
-      const { data } = await axios.post("/login", {
-        username,
-        password,
-      });
-      if (data.error) {
-        toast.error(data.error);
+      const response = await axios.post("/login", { username, password });
+      if (response.data.error) {
+        toast.error(response.data.error);
       } else {
-        setData({});
+        // Set the user state if login is successful
+        setUser(response.data); // Ensure this returns user info
+        setData({}); // Reset the login form
         navigate("/landing");
       }
     } catch (error) {
       console.log(error);
     }
   };
+
   return (
     <div className="bg-gradient-to-r from-[#121212] to-[#030149] h-screen flex justify-center items-center">
       <div className="w-[50%] mx-auto bg-white min-h-[400px] rounded-lg flex shadowbox">

@@ -94,22 +94,40 @@ const loginUser = async (req, res) => {
   }
 };
 
-// profile
-// const getProfile = (req, res) => {
-//   const { token } = req.cookies;
-//   if (token) {
-//     jwt.verify(token, process.env.JWT_SECRET, {}, (err, user) => {
-//       if (err) throw err;
-//       res.json(user);
-//     });
-//   } else {
-//     res.json(null);
-//   }
-// };
+const getProfile = (req, res) => {
+  const { token } = req.cookies; // Extract token from cookies
+  if (!token) {
+    return res.status(401).json({ error: "Unauthorized" });
+  }
+
+  jwt.verify(token, process.env.JWT_SECRET, {}, (err, user) => {
+    if (err) return res.status(403).json({ error: "Invalid token" });
+
+    // Assuming user information is needed from the database
+    User.findById(user.id)
+      .select("firstname lastname username") // Fetch necessary fields
+      .then((userData) => {
+        if (!userData) {
+          return res.status(404).json({ error: "User not found" });
+        }
+        res.json(userData); // Send user data
+      })
+      .catch((err) => {
+        console.error(err);
+        res.status(500).json({ error: "Server error" });
+      });
+  });
+};
+
+const logoutUser = (req, res) => {
+  res.clearCookie("token"); // Clear the cookie
+  res.json({ message: "Logged out successfully" });
+};
 
 module.exports = {
   test,
   registerUser,
   loginUser,
-  //getProfile,
+  getProfile,
+  logoutUser,
 };

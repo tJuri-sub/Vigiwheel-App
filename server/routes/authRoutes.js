@@ -6,19 +6,21 @@ const {
   registerUser,
   loginUser,
   getProfile,
+  logoutUser,
 } = require("../controller/authController");
-
-//middleware
-router.use(
-  cors({
-    credentials: true,
-    origin: "http://localhost:5173",
-  })
-);
+const {
+  driversInfo,
+  getDriversForUser,
+} = require("../controller/driverController");
+//const authMiddleware = require("../middleware/authMw");
 
 router.get("/", test);
 router.post("/register", registerUser);
 router.post("/login", loginUser);
-// router.get("/profile", getProfile);
+router.post("/logout", logoutUser);
+router.get("/profile", getProfile);
+
+router.post("/drivers", driversInfo);
+//router.get("/drivers", getDriversForUser);
 
 module.exports = router;
